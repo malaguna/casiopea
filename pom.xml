@@ -19,7 +19,7 @@
 		<spring.version>4.1.6.RELEASE</spring.version>
 		<hsqldb.version>2.3.2</hsqldb.version>
 		<liquibase.version>3.3.5</liquibase.version>
-		<liquibase.hibernate.version>3.5</liquibase.hibernate.version>
+		<liquibase.hibernate.version>3.6-SNAPSHOT</liquibase.hibernate.version>
 	</properties>
 
 	<profiles>
