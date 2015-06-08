@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+
+<!-- 
+Copyright 2015 Miguel Ángel Laguna Lobato
+
+This file is part of Casiopea Project.
+
+Casiopea  Project is  free  software : it means  you  can redistribute 
+it and/or modify it under  the terms of the GNU General Public License 
+as published by the Free  Software Foundation, either version 3 of the 
+License, or (at your option) any later version.
+
+Casiopea   Project   is  distributed   in  the  hope  that   it   will 
+be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+of  MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU 
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Casiopea Project.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.malaguna.casiopea.model.MemberShip" table="member_ship">
+
+		<id name="code" type="int">
+			<column name="code" />
+			<!-- Be careful, MySQL does not support SEQUENCES !!! This generator is 
+				compliant with Oracle, PostgreSql, HSQLDB, DB", SqlServer, ... -->
+			<generator class="sequence">
+				<param name="sequence">seq_member_ship</param>
+			</generator>
+		</id>
+
+		<property name="active" type="boolean">
+			<column name="active" not-null="true" />
+		</property>
+
+		<property name="start" type="date">
+			<column name="start" not-null="true" />
+		</property>
+
+		<property name="end" type="date">
+			<column name="end" not-null="true" />
+		</property>
+
+		<property name="role" column="role">
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">org.malaguna.casiopea.model.Role</param>
+				<param name="useNamed">true</param>
+			</type>
+		</property>
+		
+		<many-to-one class="org.malaguna.casiopea.model.Person"
+			name="member" not-null="true">
+			<column name="member" />
+		</many-to-one>
+
+		<many-to-one class="org.malaguna.casiopea.model.Project"
+			name="project" not-null="true">
+			<column name="member" />
+		</many-to-one>
+
+	</class>
+</hibernate-mapping>

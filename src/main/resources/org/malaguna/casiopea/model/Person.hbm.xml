@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<!-- 
+Copyright 2015 Miguel Ángel Laguna Lobato
+
+This file is part of Casiopea Project.
+
+Casiopea  Project is  free  software : it means  you  can redistribute 
+it and/or modify it under  the terms of the GNU General Public License 
+as published by the Free  Software Foundation, either version 3 of the 
+License, or (at your option) any later version.
+
+Casiopea   Project   is  distributed   in  the  hope  that   it   will 
+be useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+of  MERCHANTABILITY or  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU 
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Casiopea Project.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.malaguna.casiopea.model.Person" table="person">
+		<id name="uid" type="string">
+			<column name="uid" />
+			<generator class="identity"/>
+		</id>
+
+		<property name="name" type="string" length="25" not-null="true">
+			<column name="name" />
+		</property>
+
+		<property name="surname" type="string" length="25">
+			<column name="surname" />
+		</property>
+
+		<property name="start" type="date">
+			<column name="start" not-null="true" />
+		</property>
+
+		<property name="active" type="boolean">
+			<column name="active" not-null="true" />
+		</property>
+
+	</class>
+</hibernate-mapping>

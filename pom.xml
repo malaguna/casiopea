@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>malaguna</groupId>
+	<artifactId>casiopea</artifactId>
+	<packaging>jar</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>Casiopea</name>
+	<url>https://github.com/malaguna</url>
+	<description>Sample web application using liquibase</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+		<timestamp>${maven.build.timestamp}</timestamp>
+		<hibernate.version>4.3.10.Final</hibernate.version>
+		<spring.version>4.1.6.RELEASE</spring.version>
+		<hsqldb.version>2.3.2</hsqldb.version>
+		<liquibase.version>3.3.5</liquibase.version>
+		<liquibase.hibernate.version>3.5</liquibase.hibernate.version>
+	</properties>
+
+	<profiles>
+
+		<!-- Debug config profiles -->
+		<profile>
+			<id>log-debug</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<app.development>true</app.development>
+				<app.logLevel>debug</app.logLevel>
+				<hibernate.showSql>true</hibernate.showSql>
+				<hibernate.formatSql>true</hibernate.formatSql>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>log-error</id>
+			<properties>
+				<app.development>false</app.development>
+				<app.logLevel>error</app.logLevel>
+				<hibernate.showSql>false</hibernate.showSql>
+				<hibernate.formatSql>false</hibernate.formatSql>
+			</properties>
+		</profile>
+
+		<!-- DataBase config profiles -->
+		<profile>
+			<id>db-local</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<!-- Local HSQLDB server database -->
+				<hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect>
+				<hibernate.driver>org.hsqldb.jdbcDriver</hibernate.driver>
+				<hibernate.url>jdbc:hsqldb:hsql://localhost/casiopea</hibernate.url>
+				<hibernate.username>sa</hibernate.username>
+				<hibernate.password></hibernate.password>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>db-other</id>
+			<properties>
+				<!-- Here you can define properties of other ddbb access -->
+			</properties>
+		</profile>
+	</profiles>
+
+	<dependencies>
+
+		<!-- logging -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+
+		<!-- testing -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- commons -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
+		</dependency>
+
+		<!-- jdbc drivers -->
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>${hsqldb.version}</version>
+		</dependency>
+
+		<!-- core -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-ehcache</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-c3p0</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<!-- LiquiBase dependencies -->
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>${liquibase.version}</version>
+		</dependency>	
+		<dependency>
+			<groupId>org.liquibase.ext</groupId>
+			<artifactId>liquibase-hibernate4</artifactId>
+			<version>${liquibase.hibernate.version}</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+
+		<!-- classpath resources filterirng -->
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>log4j.properties</include>
+					<include>liquibase.properties</include>
+					<include>hibernate.cfg.xml</include>
+					<include>app-context.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>log4j.properties</exclude>
+					<exclude>liquibase.properties</exclude>
+					<exclude>hibernate.cfg.xml</exclude>
+					<exclude>app-context.xml</exclude>
+				</excludes>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<!-- liquibase management -->
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>${liquibase.version}</version>
+				<configuration>
+					<propertyFile>target/classes/liquibase.properties</propertyFile>
+					<skip>false</skip>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.hsqldb</groupId>
+						<artifactId>hsqldb</artifactId>
+						<version>${hsqldb.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.liquibase.ext</groupId>
+						<artifactId>liquibase-hibernate4</artifactId>
+						<version>${liquibase.hibernate.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-orm</artifactId>
+						<version>${spring.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-context-support</artifactId>
+						<version>${spring.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>7</source>
+					<target>7</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
