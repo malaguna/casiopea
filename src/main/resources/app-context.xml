@@ -44,7 +44,7 @@ along with Casiopea Project.  If not, see <http://www.gnu.org/licenses/>.
 	<!-- Gestores de sesión de base de datos -->
 	<bean
 		id="sessionFactory"
-		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 
 		<property name="mappingLocations">

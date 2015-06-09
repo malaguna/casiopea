@@ -184,7 +184,6 @@
 				<version>${liquibase.version}</version>
 				<configuration>
 					<propertyFile>target/classes/liquibase.properties</propertyFile>
-					<skip>false</skip>
 				</configuration>
 				<dependencies>
 					<dependency>
